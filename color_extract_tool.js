@@ -46,7 +46,6 @@ $(function() {
                 var cmap = MMCQ.quantize(imagePixelsRgb, maxcolors)
                 var topResults = cmap.palette();
                 var topFive = topResults.map((x) => rgbToHex(x[0], x[1], x[2]));
-                console.log(topFive);
 
                 // loop to display all
                 for (let i = 0; i < maxcolors; i++) {
@@ -72,8 +71,6 @@ $(function() {
                     finalDisplay.removeChild(finalDisplay.firstChild);
                 }
                 finalDisplay.appendChild(canvas);
-                console.log(eachWidth);
-                console.log("Done.");
             };
             // preview
             if (img_preview) {
