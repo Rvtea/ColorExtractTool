@@ -3,6 +3,7 @@ $(function() {
     var info = document.getElementById('file-info');
     var img_preview = document.getElementById('image-preview');
     var maxcolors = 5; // currently only support top 5
+    var eachHeight = 50;
     fileInput.addEventListener('change', function() {
         if (!fileInput.value) {
             info.innerHTML = '没有选择文件';
@@ -28,10 +29,9 @@ $(function() {
                 var img_height = this.height;
                 // set the size of canvas
                 canvas.width = (img_width < 600) ? img_width : 600;
-                canvas.height = img_height * canvas.width / img_width + 50;
-                var eachWidth = canvas.width / maxcolors; // define each color bar width
-                // draw image
-                context.drawImage(this, 0, 0, canvas.width, canvas.height - 50);
+                canvas.height = img_height * canvas.width / img_width + eachHeight;
+                // draw image with scaling
+                context.drawImage(this, 0, 0, canvas.width, canvas.height - eachHeight);
                 // obtain image data
                 let imageData = context.getImageData(0, 0, img_width, img_height);
                 let imagePixelsRgb = [];
@@ -48,22 +48,27 @@ $(function() {
                 var topFive = topResults.map((x) => rgbToHex(x[0], x[1], x[2]));
 
                 // loop to display all
+                var blankLeavingSize = 10; // 10 px
+                var eachWidth = (canvas.width + blankLeavingSize) / maxcolors; // define each color bar width
+                var barWidth = eachWidth - blankLeavingSize,
+                    barHeight = eachHeight - blankLeavingSize;
                 for (let i = 0; i < maxcolors; i++) {
                     // display the top 5 colors using canvas
                     var canvas1 = document.createElement('canvas');
                     var ctx = canvas1.getContext('2d');
                     canvas1.width = eachWidth;
-                    canvas1.height = 50;
-                    // set the size of canvas
-                    let rectWidth = eachWidth,
-                        rectHeight = 50;
+                    canvas1.height = eachHeight;
                     // draw image
                     ctx.fillStyle = topFive[i];
-                    ctx.fillRect(0, 0, eachWidth, rectHeight); // 75 for test
+                    ctx.fillRect(0, 0, eachWidth, eachHeight);
+                    ctx.fillStyle = inverseHex(topFive[i]); // add text with inverse color over the bg color bar
+                    ctx.font = "12px serif";
+                    ctx.textBaseline = 'bottom';
+                    ctx.fillText(topFive[i], 0, 20);
 
                     // display another kind preview with color display under image
                     // leave 1 line between the image and the color bar
-                    context.drawImage(canvas1, 0, 0, eachWidth, 49, 0 + i * eachWidth, canvas.height - 49, eachWidth, 49);
+                    context.drawImage(canvas1, 0, 0, barWidth, barHeight, 0 + i * eachWidth, canvas.height - barHeight, barWidth, barHeight);
                 }
 
                 var finalDisplay = document.getElementById('finalDisplay');
@@ -98,7 +103,7 @@ function formatBytes(bytes, decimals) {
 
 // thanks to http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
 function componentToHex(c) {
-    var hex = c.toString(16);
+    var hex = c.toString(16).toUpperCase(); // fix a issue, now we only use Upper Case to fit with hexToRgb()
     return hex.length == 1 ? "0" + hex : hex;
 }
 
@@ -133,6 +138,12 @@ function colorDistance(color1, color2) {
         dis += (rgb1[i] - rgb2[i]) * (rgb1[i] - rgb2[i]);
     }
     return Math.sqrt(dis);
+}
+
+function inverseHex(hex) {
+    // hex format fit with #xxyyzz
+    let [r, g, b] = hexToRgb(hex).map((x) => (255 - x));
+    return rgbToHex(r, g, b);
 }
 
 /*! 
@@ -197,7 +208,7 @@ var MMCQ = (function() {
     // private constants
     var sigbits = 5,
         rshift = 8 - sigbits,
-        maxIterations = 1000,
+        maxIterations = 300, //1000 as original
         fractByPopulations = 0.75;
 
     // get reduced-space color index for a pixel
