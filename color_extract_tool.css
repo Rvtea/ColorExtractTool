@@ -1,0 +1,53 @@
+body {
+    max-width: 600px;
+    height: 100%;
+    margin: 30px auto 50px auto;
+    background-color: #F5F5F5 !important;
+}
+
+ul {
+    list-style-type: none;
+}
+
+img {
+    max-width: 600px;
+    display: block;
+    margin: 10px auto;
+}
+
+.main {
+    max-width: 600px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0px 0px -60px 0px;
+    padding: 10px 0px 10px 0px;
+    text-align: left;
+    box-shadow: 10px 20px 60px 0px #e3d6c7;
+    -webkit-box-shadow: 10px 20px 60px 0px #e3d6c7;
+}
+
+.main p {
+    padding-left: 10px;
+}
+
+canvas {
+    display: block;
+    margin: 10px auto;
+}
+
+#title {
+    text-align: center;
+    font-family: "AppleSDGothicNeo-Thin" !important;
+}
+
+.footer,
+.push {
+    bottom: 0;
+    height: 60px;
+}
+
+.footer {
+    padding-top: 25px;
+    color: #909090;
+}
