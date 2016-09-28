@@ -1,0 +1,61 @@
+$std_width: 600px;
+$shadow_color: #e3d6c7;
+body {
+    max-width: $std_width;
+    height: 100%;
+    margin: 30px auto 50px auto;
+    background-color: #F5F5F5 !important;
+}
+
+ul {
+    list-style-type: none;
+}
+
+@mixin block_margin {
+    display: block;
+    margin: 10px auto;
+}
+
+img {
+    @include block_margin;
+    max-width: $std_width;
+}
+
+canvas {
+    @include block_margin;
+}
+
+@mixin box_shadowing($color_value: $shadow_color) {
+    box-shadow: 10px 20px 60px 0px $color_value;
+    -webkit-box-shadow: 10px 20px 60px 0px $color_value;
+}
+
+.main {
+    max-width: $std_width;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0px 0px -60px 0px;
+    padding: 10px 0px 10px 0px;
+    text-align: left;
+    @include box_shadowing;
+    p {
+        padding-left: 10px;
+    }
+}
+
+#title {
+    text-align: center;
+    font-family: "AppleSDGothicNeo-Thin" !important;
+}
+
+.push {
+    bottom: 0;
+    height: 60px;
+}
+
+.footer {
+    @extend .push; // inherit
+    padding-top: 25px;
+    color: #909090;
+}
